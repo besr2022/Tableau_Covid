@@ -1,0 +1,45 @@
+--Tableau Project: Covid World Wide Stats (Death and Vaccinations)
+--Data sourced from: https://ourworldindata.org/covid-deaths
+--Main tables used: `covid-365903.covid.covid_deaths` and `covid-365903.covid.covid_vaccinations`
+--SQL queries written for use in Google BigQuery
+
+
+--1
+Select SUM(new_cases) as total_cases, SUM(cast(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/SUM(New_Cases)*100 as DeathPercentage
+From `covid-365903.covid.covid_deaths`
+Where continent is not null 
+Order by 1,2
+
+--2
+Select location, SUM(cast(new_deaths as int)) as TotalDeathCount
+From `covid-365903.covid.covid_deaths`
+Where continent is null 
+and location not in ('World', 'European Union', 'International')
+Group by location
+Order by TotalDeathCount desc
+
+--3
+Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From `covid-365903.covid.covid_deaths`
+Group by Location, Population
+Order by PercentPopulationInfected desc
+
+--4
+--Small more manageable size to export
+Select Location, Population,date, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From `covid-365903.covid.covid_deaths`
+where location = 'North America'
+or location = 'South America'
+or location = 'Asia'
+or location = 'Europe'
+or location = 'Africa'
+or location = 'Oceania'
+Group by Location, Population, date
+Order by PercentPopulationInfected desc
+
+--Extra
+--Giant dataset - too big to export easily as CSV or JSON
+Select Location, Population,date, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From `covid-365903.covid.covid_deaths`
+Group by Location, Population, date
+Order by PercentPopulationInfected desc
