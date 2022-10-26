@@ -1,4 +1,5 @@
 --Tableau Project: Covid World Wide Stats (Death and Vaccinations)
+--View Tableau Dashboard: https://public.tableau.com/app/profile/betty8659
 --Data sourced from: https://ourworldindata.org/covid-deaths
 --Main tables used: `covid-365903.covid.covid_deaths` and `covid-365903.covid.covid_vaccinations`
 --SQL queries written for use in Google BigQuery
